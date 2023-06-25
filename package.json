@@ -1,0 +1,18 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "tic-tac-toe using socket.io and reactJS",
+  "license": "MIT",
+  "packageManager": "yarn@3.6.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "yarn workspaces foreach -pi run start",
+    "start-client": "yarn workspace client start",
+    "build": "yarn workspaces foreach -pti run build"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
