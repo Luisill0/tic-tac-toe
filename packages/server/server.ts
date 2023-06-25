@@ -1,15 +1,10 @@
-import http from 'http';
-
 import dotenv from 'dotenv';
 dotenv.config();
+import { appServer } from "./app";
 
 const PORT = process.env['PORT'];
 if(!PORT) throw new Error('port is not defined');
 
-import { app } from "./app";
-
-const server = http.createServer(app);
-
-server.listen(PORT, () => {
+appServer.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
 })
