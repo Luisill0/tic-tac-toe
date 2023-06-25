@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { UserContextProvider } from 'context';
+import { SocketContextProvider, UserContextProvider } from 'context';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -14,9 +14,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <App />
-    </UserContextProvider>
+    <SocketContextProvider>
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </SocketContextProvider>
   </React.StrictMode>
 );
 
