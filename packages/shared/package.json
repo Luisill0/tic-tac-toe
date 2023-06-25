@@ -1,0 +1,15 @@
+{
+  "name": "@tic-tac-toe/shared",
+  "version": "1.0.0",
+  "description": "shared types",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "postinstall": "yarn build",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.3"
+  }
+}
