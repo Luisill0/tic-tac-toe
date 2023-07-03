@@ -8,15 +8,13 @@ import 'scss/css/style.css';
 
 type TileProps = {
     size: number;
-    content: string;
     position: number;
     updateBoard: (tile: number) => void;
 }
 
-const Tile = ({size, content, position, updateBoard}: TileProps): JSX.Element => {
-    const { board, currentPlayer } = useContext(UserContext) as UserContextProps;
-    const [tileContent, setTileContent] = useState<string>(() => content);
-    const [canClick, setCanClick] = useState<boolean>(() => !winState(board) && tileContent.length === 0);
+const Tile = ({size, position, updateBoard}: TileProps): JSX.Element => {
+    const { board } = useContext(UserContext) as UserContextProps;
+    const [canClick, setCanClick] = useState<boolean>(() => !winState(board) && board[position].length===0);
 
     useEffect(() => {
         if(winState(board)) {
@@ -26,7 +24,6 @@ const Tile = ({size, content, position, updateBoard}: TileProps): JSX.Element =>
 
     const handleClick = () => {
         if(!canClick) return;
-        setTileContent(currentPlayer);
         updateBoard(position);
         setCanClick(false);
     }
@@ -47,7 +44,7 @@ const Tile = ({size, content, position, updateBoard}: TileProps): JSX.Element =>
                 cursor: `${canClick ? 'pointer': 'initial'}`
             }}
         >
-            {tileContent}
+            {board[position]}
         </div>
     )
 }

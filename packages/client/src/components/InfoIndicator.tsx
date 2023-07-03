@@ -9,16 +9,13 @@ import 'scss/css/style.css';
 const TurnIndicator = () => {
     const { board, currentPlayer } = useContext(UserContext) as UserContextProps;
     const color = currentPlayer === 'X' ? 'blue' : 'red';
-
     const [showWin, setShowWin] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log(board);
-        console.log(winState(board));
         if(winState(board)) {
             setShowWin(true);
         }
-    }, [board])
+    }, [board, currentPlayer])
 
     return (
         <span
