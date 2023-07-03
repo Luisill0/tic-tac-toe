@@ -6,5 +6,5 @@ export type UserContextProps = {
     board: BoardType;
     updateBoard: (newBoard: BoardType) => void;
     currentPlayer: Player;
-    togglePlayer: () => void;
+    togglePlayer: (newPlayer?: Player | undefined) => void;
 }
