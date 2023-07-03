@@ -9,7 +9,8 @@ import { winState } from "@helpers/board";
 export const SocketContext = React.createContext<SocketContextProps | null>(null);
 
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = process.env.NODE_ENV === 'production' ? window.location : 'http://localhost:8000';
+const PORT = process.env.REACT_APP_SERVER_PORT; 
+const URL = process.env.NODE_ENV === 'production' ? window.location : `http://localhost:${PORT}`;
 
 export const SocketContextProvider = ({children}: PropsWithChildren): JSX.Element => {
     const { board, updateBoard, togglePlayer } = useContext(UserContext) as UserContextProps;
