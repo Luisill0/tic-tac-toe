@@ -14,8 +14,9 @@ export const UserContextProvider = ({children}: PropsWithChildren): JSX.Element 
     const [board, setBoard] = useState<BoardType>(() => getInitialBoardState());
     const [windowSize, setWindowSize] = useState<WindowDimensions>(() => getInitialWindowSize());
 
-    const togglePlayer = () => {
-        setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+    const togglePlayer = (newPlayer?: Player | undefined) => {
+        if(newPlayer) setCurrentPlayer(newPlayer)
+        else setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
     }
 
     const updateBoard = (newBoard: BoardType) => {

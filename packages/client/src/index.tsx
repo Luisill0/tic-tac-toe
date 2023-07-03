@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { UserContextProvider } from 'context';
+import { SocketContextProvider, UserContextProvider } from 'context';
+import { AppRouter } from 'router/AppRouter';
 
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
@@ -15,7 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <App />
+      <SocketContextProvider>
+        <AppRouter />
+      </SocketContextProvider>
     </UserContextProvider>
   </React.StrictMode>
 );

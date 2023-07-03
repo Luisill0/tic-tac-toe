@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { UserContextProps } from '@types';
-import { UserContext } from 'context';
+import { SocketContextProps, UserContextProps } from '@types';
+import { SocketContext, UserContext } from 'context';
 import { winState } from '@helpers/board';
 import { BoardType } from '@tic-tac-toe/shared';
 
@@ -15,7 +15,8 @@ type BoardProps = {
 
 const Board = ({color}: BoardProps): JSX.Element => {
     const { board, updateBoard, currentPlayer, togglePlayer, windowSize } = useContext(UserContext) as UserContextProps;
-    
+    const { emitMove } = useContext(SocketContext) as SocketContextProps;
+
     const minDimension = Math.min(windowSize.height, windowSize.width);
     const boardWidth = Math.round(minDimension * 0.7);
     const tileSize = Math.round(boardWidth / 3);
@@ -24,6 +25,7 @@ const Board = ({color}: BoardProps): JSX.Element => {
         let newBoard = [...board] as BoardType;
         newBoard[tile] = currentPlayer;
         updateBoard(newBoard);
+        emitMove({position: tile, player: currentPlayer});
 
         if(!winState(newBoard)) {
             togglePlayer();
@@ -42,11 +44,10 @@ const Board = ({color}: BoardProps): JSX.Element => {
             }}
         >
             {
-                board.map((tile, index) => (
+                board.map((_, index) => (
                     <Tile
                         key={index}
                         size={tileSize}
-                        content={tile}
                         position={index}
                         updateBoard={onBoardChange}
                     />
