@@ -3,6 +3,8 @@ import express from "express";
 import http from 'http';
 import { Server } from 'socket.io';
 
+import { GameMove } from '@tic-tac-toe/shared';
+
 const app = express();
 
 export const appServer = http.createServer(app);
@@ -28,5 +30,10 @@ io.on('connection', (socket) => {
 
     socket.on('hello', (msg) => {
         console.log('hello received!', msg);
+    })
+
+    socket.on('move-sent', (move: GameMove) => {
+        console.log('i got a move!', move);
+        socket.broadcast.emit('move-made', move);
     })
 })
