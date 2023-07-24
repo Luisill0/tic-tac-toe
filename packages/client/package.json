@@ -28,8 +28,9 @@
   },
   "scripts": {
     "start": "yarn run watch-sass & react-scripts start",
+    "compile-styles": "sass src/scss/custom.scss src/scss/css/style.css",
     "watch-sass": "sass --watch src/scss/custom.scss src/scss/css/style.css",
-    "build": "react-scripts build",
+    "build": "yarn compile-styles && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
