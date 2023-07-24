@@ -1,26 +1,32 @@
 import { useContext, useEffect, useState } from "react";
 
-import { UserContextProps } from "@types";
-import { UserContext } from "context";
+import { BoardType } from "@tic-tac-toe/shared";
 import { winState } from "@helpers/board";
+
+import { BoardContextProps } from "@types";
+import { BoardContext } from "context";
 
 import 'scss/css/style.css';
 
 type TileProps = {
+    board: BoardType;
     size: number;
     position: number;
     updateBoard: (tile: number) => void;
+    online?: boolean;
 }
 
-const Tile = ({size, position, updateBoard}: TileProps): JSX.Element => {
-    const { board } = useContext(UserContext) as UserContextProps;
+const Tile = ({board, size, position, updateBoard, online}: TileProps): JSX.Element => {
+    const { myTurn } = useContext(BoardContext) as BoardContextProps; 
     const [canClick, setCanClick] = useState<boolean>(() => !winState(board) && board[position].length===0);
 
     useEffect(() => {
-        if(winState(board)) {
-            setCanClick(false);
+        if(online){
+            setCanClick((myTurn) && (!winState(board)) && (board[position].length === 0));
+        }else {
+            setCanClick((!winState(board)) && (board[position].length === 0));
         }
-    }, [board])
+    }, [board, myTurn])
 
     const handleClick = () => {
         if(!canClick) return;
