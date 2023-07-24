@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 
-import { UserContextProps } from "@types";
+import { BoardContextProps } from "@types";
+import { BoardContext } from "context";
 import { winState } from "@helpers/board";
-import { UserContext } from "context";
 
 import 'scss/css/style.css';
 
 const TurnIndicator = () => {
-    const { board, currentPlayer } = useContext(UserContext) as UserContextProps;
+    const { board, currentPlayer } = useContext(BoardContext) as BoardContextProps;
     const color = currentPlayer === 'X' ? 'blue' : 'red';
     const [showWin, setShowWin] = useState<boolean>(false);
 

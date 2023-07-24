@@ -1,20 +1,52 @@
 import { useContext, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
-import { Board, InfoIndicator } from 'components';
+import { BoardType, Player } from '@tic-tac-toe/shared';
 
-import { SocketContextProps } from '@types';
-import { SocketContext } from 'context';
+import { BoardContextProps, SocketContextProps } from '@types';
+import { BoardContext, SocketContext } from 'context';
+
+import { winState } from '@helpers/board';
+
+import { Board, InfoIndicator } from 'components';
 
 import 'scss/css/style.css';
 import 'styles/GamePage.css';
 
-const GamePage = () => {
-  const { connect } = useContext(SocketContext) as SocketContextProps;
+type GamePageProps = {
+  online?: boolean;
+  room?:string;
+  myPlayer: Player;
+}
+
+const GamePage = ({online, room, myPlayer}: GamePageProps) => {
+  const { board, updateBoard, currentPlayer, updateMyTurn, updateMyPlayer, togglePlayer } = useContext(BoardContext) as BoardContextProps;
+  const { emitMove } = useContext(SocketContext) as SocketContextProps;
 
   useEffect(() => {
-    connect();
-  }, [connect])
+    if(online) {
+      updateMyPlayer(myPlayer);
+      updateMyTurn(myPlayer === currentPlayer);
+    }
+  }, [])
+
+  if(online && !room) return <Navigate to='/' />
+
+  const onBoardChange = (tile: number) => {
+    let newBoard = [...board] as BoardType;
+    newBoard[tile] = currentPlayer;
+    updateBoard(newBoard);
+
+    if(online) {
+      updateMyTurn(false);
+      emitMove({position: tile, player: currentPlayer});
+    }
+
+    if(!winState(newBoard)) {
+      togglePlayer();
+    }
+  }
 
   return (
     <Container
@@ -23,7 +55,11 @@ const GamePage = () => {
       className='p-0 text-center'
     >
       <InfoIndicator />
-      <Board />
+      <Board
+        board={board}
+        online={online}
+        onBoardChange={onBoardChange}
+      />
     </Container>
   );
 }
