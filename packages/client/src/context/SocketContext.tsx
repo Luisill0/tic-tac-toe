@@ -1,10 +1,12 @@
 import React, { PropsWithChildren, useContext, useState } from "react";
 import { io } from 'socket.io-client';
 
-import { SocketContextProps, UserContextProps } from "@types";
-import { UserContext } from "context";
 import { BoardType, GameMove } from "@tic-tac-toe/shared";
+
 import { winState } from "@helpers/board";
+
+import { BoardContextProps, SocketContextProps } from "@types";
+import { BoardContext } from "context";
 
 export const SocketContext = React.createContext<SocketContextProps | null>(null);
 
@@ -13,12 +15,21 @@ const PORT = process.env.REACT_APP_SERVER_PORT;
 const URL = process.env.NODE_ENV === 'production' ? window.location : `http://localhost:${PORT}`;
 
 export const SocketContextProvider = ({children}: PropsWithChildren): JSX.Element => {
-    const { board, updateBoard, togglePlayer } = useContext(UserContext) as UserContextProps;
+    const { board, updateBoard, togglePlayer, myPlayer, updateMyTurn } = useContext(BoardContext) as BoardContextProps;
     const [ socket ] = useState(() => io(URL, {autoConnect: false}));
+    const [currentSocketRoom, setCurrentSocketRoom] = useState<string | null>('');
 
     const connect = () => {
         if(socket.connected) return;
         socket.connect();
+    }
+
+    const createRoom = (roomId: string) => {
+        socket.emit('create-room', roomId);
+    }
+
+    const joinRoom = (roomId: string) => {
+        socket.emit('join-room', roomId);
     }
 
     const sayHello = () => {
@@ -26,33 +37,39 @@ export const SocketContextProvider = ({children}: PropsWithChildren): JSX.Elemen
     }
 
     const emitMove = (move: GameMove) => {
-        console.log('i want to emit a move', move);
-        socket.emit('move-sent', move);
+        socket.emit('move-sent', {move: move, room: currentSocketRoom});
     }
 
     const moveMade = (move: GameMove) => {
-        console.log('i client received a move ', move);
         let tile = move.position;
         let player = move.player;
 
         let newBoard = [...board] as BoardType;
         newBoard[tile] = player;
-
-        console.log('i want to update the board', newBoard);
         
         let newP = winState(newBoard) ? player : undefined;
 
-        console.log('newP: ',newP);
+        // Player will be toggled, so it will be my turn if the move made was different than me
+        updateMyTurn(myPlayer !== player);
+
         togglePlayer(newP);
         updateBoard(newBoard);
     }
 
+    const resetSocketRoom = () => setCurrentSocketRoom(null);    
+
     socket.on('move-made', moveMade);
+    socket.on('players-ready', (room: string) => setCurrentSocketRoom(room));
+    socket.on('create-room-error', () => window.location.replace('/'));
 
     const provider = {
         connect,
+        createRoom,
+        joinRoom,
         sayHello,
-        emitMove
+        emitMove,
+        currentSocketRoom,
+        resetSocketRoom
     }
 
     return (
