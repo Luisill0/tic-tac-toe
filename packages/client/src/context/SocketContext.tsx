@@ -10,8 +10,9 @@ import { BoardContext } from "context";
 
 export const SocketContext = React.createContext<SocketContextProps | null>(null);
 
-const PORT = process.env.REACT_APP_SERVER_PORT; 
-const URL = `http://localhost:${PORT}`;
+const URL = process.env.REACT_APP_SERVER_LOCATION;
+
+if(!URL) throw new Error('could not find .env');
 
 export const SocketContextProvider = ({children}: PropsWithChildren): JSX.Element => {
     const { board, updateBoard, togglePlayer, myPlayer, updateMyTurn } = useContext(BoardContext) as BoardContextProps;
