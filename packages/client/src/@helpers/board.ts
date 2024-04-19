@@ -8,10 +8,30 @@ export const getInitialBoardState = (): BoardType => (
     ]
 )
 
-export const winState = (board: string[]) => {
+export enum WinState {
+    CONTINUE=0,
+    WIN=1,
+    DRAW=2
+}
+
+/**
+ * Is the game over?
+ * 
+ * 0: Game continues.
+ * 
+ * 1: Win.
+ * 
+ * 2: Draw
+ * 
+ * @param board Array containing the tiles
+ * @returns int representing win state
+ */
+export const calcWinState = (board: string[]): WinState => {
+    const emptyTiles = board.filter(tile => tile.length === 0).length;
+    if(emptyTiles === 0) return 2;
     let sideW = sideWin(board);
     let diagW = diagWin(board);
-    return sideW || diagW;
+    return sideW || diagW ? 1 : 0;
 }
 
 const sideWin = (board: string[]): boolean => {

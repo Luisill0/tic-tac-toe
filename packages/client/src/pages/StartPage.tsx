@@ -34,12 +34,12 @@ const StartPage = (): JSX.Element => {
     return (
         <Container
             fluid
-            className='text-center'
+            className='pt-3 px-0 text-center'
         >
             <span
                 className='fs-1'
             >
-                Tic-Tac-Toe
+                Tic-Tac-Toe!
             </span>
             <Container fluid
                 className='d-flex flex-column align-items-center'
@@ -74,6 +74,20 @@ const StartPage = (): JSX.Element => {
                     centered: true,
                 }}
             />
+            <div
+                className="
+                    w-100 px-3
+                    position-absolute
+                    d-flex align-items-center justify-start 
+                "
+                style={{
+                    height: "50px",
+                    backgroundColor: "#dddddd",
+                    bottom: 0
+                }}
+            >
+                Luis Naranjo &copy; 2023
+            </div>
         </Container>
     )
 }

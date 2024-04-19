@@ -2,26 +2,24 @@ import { useContext, useEffect, useState } from "react";
 
 import { BoardContextProps } from "@types";
 import { BoardContext } from "context";
-import { winState } from "@helpers/board";
+import { calcWinState, WinState } from "@helpers/board";
 
 import 'scss/css/style.css';
 
 const TurnIndicator = () => {
     const { board, currentPlayer } = useContext(BoardContext) as BoardContextProps;
     const color = currentPlayer === 'X' ? 'blue' : 'red';
-    const [showWin, setShowWin] = useState<boolean>(false);
+    const [gameState, setGameState] = useState<WinState>(WinState.CONTINUE);
 
     useEffect(() => {
-        if(winState(board)) {
-            setShowWin(true);
-        }
+        setGameState(calcWinState(board));
     }, [board, currentPlayer])
 
     return (
         <span
             className='fs-1 text-center'
         >
-            Player
+            {gameState === WinState.DRAW ? "Draw!" : "Player"}
             &nbsp;
             <span
                 className='fw-bold'
@@ -29,10 +27,16 @@ const TurnIndicator = () => {
                     color: color
                 }}
             >
-                {currentPlayer}
+                {gameState !== WinState.DRAW ? currentPlayer : null}
             </span>
             &nbsp;
-            {showWin ? 'wins!' : 'turn'}
+            {
+                gameState !== WinState.DRAW ?
+                    gameState === WinState.WIN
+                        ? 'wins!'
+                        : 'turn'
+                : null
+            }
         </span>
     )
 }

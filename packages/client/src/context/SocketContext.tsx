@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 import { BoardType, GameMove } from "@tic-tac-toe/shared";
 
-import { winState } from "@helpers/board";
+import { calcWinState } from "@helpers/board";
 
 import { BoardContextProps, SocketContextProps } from "@types";
 import { BoardContext } from "context";
@@ -47,7 +47,7 @@ export const SocketContextProvider = ({children}: PropsWithChildren): JSX.Elemen
         let newBoard = [...board] as BoardType;
         newBoard[tile] = player;
         
-        let newP = winState(newBoard) ? player : undefined;
+        let newP = calcWinState(newBoard) ? player : undefined;
 
         // Player will be toggled, so it will be my turn if the move made was different than me
         updateMyTurn(myPlayer !== player);

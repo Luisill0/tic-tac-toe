@@ -7,7 +7,7 @@ import { BoardType, Player } from '@tic-tac-toe/shared';
 import { BoardContextProps, SocketContextProps } from '@types';
 import { BoardContext, SocketContext } from 'context';
 
-import { winState } from '@helpers/board';
+import { calcWinState, WinState } from '@helpers/board';
 
 import { Board, InfoIndicator } from 'components';
 
@@ -43,9 +43,7 @@ const GamePage = ({online, room, myPlayer}: GamePageProps) => {
       emitMove({position: tile, player: currentPlayer});
     }
 
-    if(!winState(newBoard)) {
-      togglePlayer();
-    }
+    if(calcWinState(newBoard) === WinState.CONTINUE) togglePlayer();
   }
 
   return (
