@@ -1,0 +1,5 @@
+{
+    "buildCommand": "yarn build:client",
+    "outputDirectory": "packages/client/build",
+    "installCommand": "yarn"
+}

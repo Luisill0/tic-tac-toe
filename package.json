@@ -7,8 +7,9 @@
   "main": "index.js",
   "scripts": {
     "start": "yarn workspaces foreach -pi run start",
-    "start-client": "yarn workspace client start",
-    "build": "yarn workspaces foreach -pti run build"
+    "start:client": "yarn workspace client start",
+    "build": "yarn workspaces foreach -pti run build",
+    "build:client": "yarn workspace client build"
   },
   "workspaces": {
     "packages": [
